@@ -8,11 +8,12 @@
 <title>电影信息</title>
 </head>
 <body>
-<br><br><br><br>
+<br><br>
+<center><h1>Films List</h1></center>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <a href='/Exam-12700-20161219-1/FilmServlet?method=toAddFilm' style="font-size: 30px">新增</a>
 
-	<table align='center' border='1px' style='margin-top: 20px' width='800' height='250'>
+	<table align='center' border='1px' style='margin-top: 10px' width='900' height='250'>
 		<tr>
 			<th>序号</th>
 			<th>电影编号</th>

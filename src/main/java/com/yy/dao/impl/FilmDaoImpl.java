@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,18 +71,25 @@ public class FilmDaoImpl implements FilmDao{
 		Connection  conn=JdbcTest.getConnection();
 		ResultSet resultSet=null;
 		PreparedStatement ps=null;
-	
 		try {
+		
 		String sql="delete from film where film_id=?";
+		
 		    ps= conn.prepareStatement(sql);		    
 		    ps.setInt(1,id);
-		     ps.executeUpdate();
+		    Statement statement=conn.createStatement();
+		    //使外键失效
+			statement.executeQuery("set foreign_key_checks=0");
+		    ps.executeUpdate();
+		  //让外键生效
+		    statement.executeQuery("set foreign_key_checks=1");
 		}  
 		 catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally{
 			JdbcTest.close(ps, conn, resultSet);
+			
 		}
 		
 	}
