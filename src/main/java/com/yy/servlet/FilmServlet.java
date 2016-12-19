@@ -13,6 +13,7 @@ import com.yy.service.FilmService;
 import com.yy.service.LanguageService;
 import com.yy.service.impl.FilmServiceImpl;
 import com.yy.service.impl.LanguageServiceImpl;
+import com.yy.utils.PageBean;
 
 /**
  * Servlet implementation class FilmServlet
@@ -101,8 +102,19 @@ public class FilmServlet extends HttpServlet {
 	}
 	//显示列表
 	private void table(HttpServletRequest request, HttpServletResponse response) {
-		List<Film> list=filmService.findAll();
-		request.setAttribute("list",list);
+		Film film=new Film();
+		film.setTitle(request.getParameter("filmName"));
+		int current = 1;
+		PageBean<Film> pageBean = new PageBean<Film>();
+		pageBean.setMaxResult(10);
+		if (request.getParameter("current") != null && !"".equals(request.getParameter("current"))) {
+			current = Integer.parseInt(request.getParameter("current"));
+		}
+		pageBean.setCurrentPage(current);
+		filmService.setPageBean(pageBean,film);
+		System.out.println("yy"+pageBean.getTotalPage());
+		System.out.println(pageBean.getCurrentPage());
+		request.setAttribute("pageBean", pageBean);
 		try {
 			request.getRequestDispatcher("/table.jsp").forward(request, response);
 		} catch (Exception e) {

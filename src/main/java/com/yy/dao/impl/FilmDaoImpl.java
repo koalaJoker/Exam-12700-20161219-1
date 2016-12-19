@@ -143,5 +143,76 @@ public class FilmDaoImpl implements FilmDao{
 		}
   return film;
 	}
+	
+	public List<Film> getAllFilm(Film film, int startIndex, int maxResult) {
+
+		List<Film> list=new ArrayList<Film>();
+
+		StringBuilder sb = new StringBuilder("select * from film,language ");
+		// 按名称查询
+		if (film.getTitle() != null && !"".equals(film.getTitle())) {
+			sb.append(" and title like '%" +film.getTitle()+ "%'");
+		}
+        sb.append(" and language.language_id=film.language_id");
+		sb.append(" limit " + startIndex + "," + maxResult + "");
+		// 替换
+		String sql = sb.toString().replaceFirst("and", "where");
+		System.out.println("sql:"+sql);
+		
+		Connection  conn=JdbcTest.getConnection();
+		ResultSet resultSet=null;
+		PreparedStatement ps=null;
+		
+	
+		try {
+		    ps= conn.prepareStatement(sql);
+		    resultSet =  ps.executeQuery();
+		    while(resultSet.next()){
+		       	Film f=new Film();
+		    	f.setFilm_id(resultSet.getInt("film_id"));
+		    	f.setTitle(resultSet.getString("title"));
+		    	f.setDescription(resultSet.getString("description"));
+		    	f.setLanguage_name(resultSet.getString("name"));
+		    	list.add(f);
+		    	}
+		    }
+		 catch (SQLException e) {
+			
+			e.printStackTrace();
+		}finally{
+			JdbcTest.close(ps, conn, resultSet);
+		}
+		return list;
+	}
+
+	public int getFilmCount(Film film) {
+		int totalCount = 0;
+		StringBuilder sb = new StringBuilder("select count(*) count from film");
+
+		if (film.getTitle() != null && !"".equals(film.getTitle())) {
+			sb.append(" and title like '%" + film.getTitle() + "%'");
+		}
+
+		String sql = sb.toString().replaceFirst("and", "where");
+		Connection  conn=JdbcTest.getConnection();
+		ResultSet resultSet=null;
+		PreparedStatement ps=null;
+		try {
+		
+		    ps= conn.prepareStatement(sql);
+		    resultSet =  ps.executeQuery();
+		    while(resultSet.next()){
+		    	totalCount=resultSet.getInt("count");
+		    	}
+		    }
+		 catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			JdbcTest.close(ps, conn, resultSet);
+		}
+		return totalCount;
+
+	}
 
 }

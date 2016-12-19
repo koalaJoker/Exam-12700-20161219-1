@@ -16,4 +16,8 @@ public interface FilmDao {
 	public void updateFilm(Film film,int language_id);
 	//通过id查询一条记录
 	public Film findFilmById(int film_id);
+	
+	public int getFilmCount(Film film);
+	
+	public List<Film> getAllFilm(Film film, int startIndex, int maxResult);
 }
